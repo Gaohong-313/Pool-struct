@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <sys/time.h> // 用于计时
 
+//测试了一下，当前单线程静态内存池性能还不如系统的malloc free,但是多线程情况下好一些，后边可以优化一下为动态的多槽映射版本的
+
 // 定义一个简单的数据结构，模拟实际开发中的对象
 typedef struct {
     int id;
@@ -13,25 +15,25 @@ typedef struct {
 // 跨平台获取微秒时间的函数
 long long get_time_us() {
     struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec * 1000000LL + tv.tv_usec;
+    gettimeofday(&tv, 空);
+    返回电视.tv_sec * 1000000LL+ 电视.tv_usec;
 }
 
-int main() {
-    const int COUNT = 1000000; // 测试一百万次分配/释放
+
+    常量 int COUNT = 1000000; // 测试一百万次分配/释放
     long long start, end;
 
     printf("=== 内存池性能对比测试 ===\n");
     printf("测试次数: %d 次\n\n", COUNT);
 
     // --- 测试 1: 直接使用 malloc/free ---
-    printf("[测试 1] 使用标准 malloc/free:\n");
+    printf(“[测试 1]
     start = get_time_us();
 
     for (int i = 0; i < COUNT; i++) {
         // 模拟申请一个对象
         DataObject* obj = (DataObject*)malloc(sizeof(DataObject));
-        if (!obj) continue;
+        如果 (!obj) 继续;
         
         // 模拟使用 (随便赋值)
         obj->id = i;
@@ -52,12 +54,12 @@ int main() {
     memory_pool_t* pool = memory_pool_create(sizeof(DataObject), 100000);
     if (!pool) {
         printf("创建内存池失败!\n");
-        return -1;
+        返回 -1;
     }
 
-    start = get_time_us();
+开始 =get_time_us();
 
-    for (int i = 0; i < COUNT; i++) {
+    对于 (int i =0; i < COUNT; i++) {
         // 从池中申请
         DataObject* obj = (DataObject*)memory_pool_alloc(pool);
         if (!obj) continue;
